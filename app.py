@@ -27,7 +27,7 @@ def get_topic_words_and_hints(topic, count):
         messages=[
             {
                 "role": "user",
-                "content": f"Generate {count} unique five-letter words related to {topic} along with hints.",
+                "content": f"You are a crossword generator. Generate {count} unique five-letter words related to {topic} along with hints. Format should be the word separated by a colon then the hint. Each line should have one word",
             }
         ],
         model="llama3-8b-8192",
@@ -40,6 +40,7 @@ def get_topic_words_and_hints(topic, count):
         if ':' in line:
             word, hint = line.split(":")
             words_dict[word.strip()] = hint.strip()
+    st.write(words_dict)
     return words_dict
 
 # Function to create crossword grid and fit words with overlap
