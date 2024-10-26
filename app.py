@@ -50,22 +50,28 @@ def create_crossword_grid(words):
     :param words: List of words to place on the grid
     :return: 2D list representing the grid
     """
-    grid_size = max(len(word) for word in words) + 5  # Define grid size
+    # Define grid size based on the longest word length with a buffer
+    grid_size = max(len(word) for word in words) + 5
     grid = [["" for _ in range(grid_size)] for _ in range(grid_size)]
     
-    # Arrange words on grid with overlap logic
     for word in words:
         placed = False
         attempts = 0
+        
+        # Attempt to place each word on the grid with retries to prevent overlapping issues
         while not placed and attempts < 10:
-            row, col = random.randint(0, grid_size-5), random.randint(0, grid_size-5)
+            # Randomly select starting position but ensure enough space for the word
+            row = random.randint(0, grid_size - 1)
+            col = random.randint(0, grid_size - len(word))
+            
+            # Check if the word can fit horizontally starting from this position
             if all(grid[row][col + i] in ["", word[i]] for i in range(len(word))):
                 for i, char in enumerate(word):
                     grid[row][col + i] = char
-                placed = True
+                placed = True  # Mark the word as placed
             attempts += 1
-    return grid
 
+    return grid
 # Display the generated crossword grid on Streamlit
 def display_crossword_grid(grid):
     """
