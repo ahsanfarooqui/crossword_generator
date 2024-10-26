@@ -42,23 +42,6 @@ def get_topic_words_and_hints(topic, count):
             words_dict[word.strip()] = hint.strip()
     return words_dict
 
-# Initialize Streamlit app with title and topic input
-st.title("Crossword Puzzle Game")
-
-# Input field for topic and dropdown for word count
-topic = st.text_input("Enter a topic (e.g., 'Movies', 'Science', etc.):")
-word_count = st.selectbox("Select number of words:", list(range(5, 16)))
-difficulty = st.selectbox("Select Difficulty Level:", ["Easy", "Medium", "Hard"])
-
-# Start game button to generate crossword puzzle with topic and word count
-if st.button("Generate Crossword"):
-    if topic:
-        # Fetch words and hints from Groq based on the topic and word count
-        words_dict = get_topic_words_and_hints(topic, word_count)
-        st.session_state["words"] = list(words_dict.keys())
-        st.session_state["hints"] = list(words_dict.values())
-        st.session_state["grid"] = create_crossword_grid(st.session_state["words"])
-
 # Function to create crossword grid and fit words with overlap
 def create_crossword_grid(words):
     """
@@ -90,6 +73,23 @@ def display_crossword_grid(grid):
     """
     for row in grid:
         st.write(" ".join([cell if cell else "_" for cell in row]))
+
+# Initialize Streamlit app with title and topic input
+st.title("Crossword Puzzle Game")
+
+# Input field for topic and dropdown for word count
+topic = st.text_input("Enter a topic (e.g., 'Movies', 'Science', etc.):")
+word_count = st.selectbox("Select number of words:", list(range(5, 16)))
+difficulty = st.selectbox("Select Difficulty Level:", ["Easy", "Medium", "Hard"])
+
+# Start game button to generate crossword puzzle with topic and word count
+if st.button("Generate Crossword"):
+    if topic:
+        # Fetch words and hints from Groq based on the topic and word count
+        words_dict = get_topic_words_and_hints(topic, word_count)
+        st.session_state["words"] = list(words_dict.keys())
+        st.session_state["hints"] = list(words_dict.values())
+        st.session_state["grid"] = create_crossword_grid(st.session_state["words"])
 
 # Timer for gameplay
 if "start_time" not in st.session_state:
